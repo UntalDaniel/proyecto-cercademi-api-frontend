@@ -27,6 +27,7 @@ logs/
 Thumbs.db
 nbproject/ # Para NetBeans
 build/ # Si NetBeans u otro IDE genera esta carpeta
+.vscode/ # Para VS Code
 
 # Archivos de configuración local (si los usas para contraseñas, etc.)
 # NUNCA subas contraseñas directamente. Usa variables de entorno en producción.
@@ -39,6 +40,10 @@ build/ # Si NetBeans u otro IDE genera esta carpeta
 *~
 ehthumbs.db
 Thumbs.db
+
+# Ignorar distribuciones de Maven locales si están en el proyecto
+apache-maven-3.9.9-bin/
+apache-maven-3.9.9-bin.zip
 
 # Archivos de Docker (generalmente no se suben los datos de volúmenes)
 # Los volúmenes nombrados como 'fuseki_data' y 'postgres_user_data' 

@@ -1,0 +1,47 @@
+# Archivos y carpetas compilados de Java/Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Archivos de logs
+*.log
+logs/
+
+# Archivos de IDEs comunes
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.DS_Store
+Thumbs.db
+nbproject/ # Para NetBeans
+build/ # Si NetBeans u otro IDE genera esta carpeta
+
+# Archivos de configuración local (si los usas para contraseñas, etc.)
+# NUNCA subas contraseñas directamente. Usa variables de entorno en producción.
+# Si tienes un application-local.properties o .env con secretos, añádelos aquí.
+# Ejemplo:
+# application-local.properties
+# .env
+
+# Archivos temporales de sistema operativo
+*~
+ehthumbs.db
+Thumbs.db
+
+# Archivos de Docker (generalmente no se suben los datos de volúmenes)
+# Los volúmenes nombrados como 'fuseki_data' y 'postgres_user_data' 
+# son gestionados por Docker y no suelen estar en tu árbol de proyecto
+# a menos que los hayas mapeado a carpetas locales específicas.
+# Si tienes carpetas locales para datos de Docker que no deben versionarse, añádelas.

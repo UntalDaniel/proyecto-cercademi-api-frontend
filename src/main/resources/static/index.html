@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CercaDeMi U Rentals - Encuentra tu hogar ideal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <a href="index.html" class="site-title">CercaDeMi U Rentals</a>
+            <nav class="site-nav">
+                <div class="nav-group main-links">
+                    <a href="index.html" class="nav-link active">Inicio</a>
+                    <a href="crear-anuncio.html" class="nav-link">Publicar Anuncio</a>
+                    <a href="my-anuncios.html" class="nav-link">Mis Anuncios</a>
+                    <a href="my-intereses.html" class="nav-link">Mis Intereses</a>
+                </div>
+                <div class="nav-group auth-links">
+                    <a href="#" class="nav-link user-menu">
+                        <i class="fas fa-user-circle"></i>
+                        <span class="username">Iniciar Sesión</span>
+                    </a>
+                    <a href="register.html" class="btn btn-outline-light btn-sm">Registrarse</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Encuentra tu Lugar Ideal en Florencia</h1>
+                <p class="hero-subtitle">Explora apartamentos, casas y habitaciones cerca de la universidad y puntos clave de la ciudad.</p>
+                <a href="#filtros" class="btn btn-primary btn-lg">
+                    <i class="fas fa-search"></i> Buscar Ahora
+                </a>
+            </div>
+            <div class="hero-overlay"></div>
+        </section>
+
+        <!-- Filtros de Búsqueda -->
+        <section id="filtros" class="filters-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2><i class="fas fa-sliders-h"></i> Filtros de Búsqueda</h2>
+                    <button type="button" id="toggle-filters" class="btn btn-text">
+                        <i class="fas fa-filter"></i> Mostrar/Ocultar Filtros
+                    </button>
+                </div>
+                
+                <form id="filter-form" class="filters-form">
+                    <div class="filters-grid">
+                        <!-- Búsqueda por texto -->
+                        <div class="form-group">
+                            <label for="search-text">
+                                <i class="fas fa-search"></i> Palabra clave
+                            </label>
+                            <input type="text" id="search-text" name="searchText" class="form-control" placeholder="Ej: Apartamento, Centro...">
+                        </div>
+
+                        <!-- Tipo de Vivienda -->
+                        <div class="form-group">
+                            <label for="tipoVivienda">
+                                <i class="fas fa-home"></i> Tipo de Vivienda
+                            </label>
+                            <select id="tipoVivienda" name="tipoVivienda" class="form-control">
+                                <option value="">Todos los tipos</option>
+                                <option value="Apartamento">Apartamento</option>
+                                <option value="Casa">Casa</option>
+                                <option value="HabitacionCompartida">Habitación Compartida</option>
+                                <option value="Apartaestudio">Apartaestudio</option>
+                                <option value="HabitacionIndependiente">Habitación Independiente</option>
+                            </select>
+                        </div>
+
+                        <!-- Precio Máximo -->
+                        <div class="form-group">
+                            <label for="precioMax">
+                                <i class="fas fa-tag"></i> Precio Máximo
+                            </label>
+                            <div class="input-with-icon">
+                                <span class="currency">$</span>
+                                <input type="number" id="precioMax" name="precioMax" class="form-control" min="0" step="50000" placeholder="Sin límite">
+                            </div>
+                        </div>
+
+                        <!-- Habitaciones -->
+                        <div class="form-group">
+                            <label for="numeroHabitacionesDisponibles">
+                                <i class="fas fa-bed"></i> Mín. Habitaciones
+                            </label>
+                            <input type="number" id="numeroHabitacionesDisponibles" name="numeroHabitacionesDisponibles" class="form-control" min="1" placeholder="Cualquiera">
+                        </div>
+
+                        <!-- Puntos de Interés -->
+                        <div class="form-group">
+                            <label for="puntoDeInteres">
+                                <i class="fas fa-map-marker-alt"></i> Cerca de
+                            </label>
+                            <select id="puntoDeInteres" name="pdiUri" class="form-control">
+                                <option value="">Cualquier ubicación</option>
+                                <!-- Los puntos de interés se cargarán dinámicamente -->
+                            </select>
+                        </div>
+
+                        <!-- Distancia Máxima -->
+                        <div class="form-group">
+                            <label for="distanciaMaxKm">
+                                <i class="fas fa-route"></i> Distancia Máx. (km)
+                            </label>
+                            <input type="number" id="distanciaMaxKm" name="distanciaMaxKm" class="form-control" min="0.1" step="0.1" placeholder="Ej: 1.5">
+                        </div>
+                    </div>
+
+                    <!-- Comodidades -->
+                    <div class="comodidades-section">
+                        <label class="comodidades-label">
+                            <i class="fas fa-star"></i> Comodidades
+                        </label>
+                        <div class="comodidades-grid">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="comodidad-wifi" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_wifi" class="checkbox-input">
+                                <label for="comodidad-wifi" class="checkbox-label">
+                                    <i class="fas fa-wifi"></i> WiFi
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="comodidad-amoblado" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_amoblado" class="checkbox-input">
+                                <label for="comodidad-amoblado" class="checkbox-label">
+                                    <i class="fas fa-couch"></i> Amoblado
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="comodidad-lavadora" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_lavadora" class="checkbox-input">
+                                <label for="comodidad-lavadora" class="checkbox-label">
+                                    <i class="fas fa-tshirt"></i> Lavadora
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="comodidad-cocina" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_cocina" class="checkbox-input">
+                                <label for="comodidad-cocina" class="checkbox-label">
+                                    <i class="fas fa-utensils"></i> Cocina
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-search"></i> Buscar Propiedades
+                        </button>
+                        <button type="button" id="reset-filters" class="btn btn-text">
+                            <i class="fas fa-undo"></i> Limpiar Filtros
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Resultados de Búsqueda -->
+        <section class="results-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2><i class="fas fa-home"></i> Propiedades Disponibles</h2>
+                    <div class="results-count">
+                        <span id="results-count">0</span> resultados encontrados
+                    </div>
+                </div>
+                
+                <div class="content-layout">
+                    <!-- Lista de Anuncios -->
+                    <div class="anuncios-container">
+                        <div id="anuncios-container" class="anuncios-grid">
+                            <div class="loading-state">
+                                <div class="spinner"></div>
+                                <p>Cargando propiedades...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mapa -->
+                    <div class="mapa-container">
+                        <div class="mapa-header">
+                            <h3><i class="fas fa-map-marked-alt"></i> Ubicación en el Mapa</h3>
+                            <button id="toggle-map" class="btn btn-text btn-sm">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <div id="map" class="mapa"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>CercaDeMi U Rentals</h4>
+                <p>Encuentra tu hogar ideal cerca de la universidad</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="crear-anuncio.html">Publicar Anuncio</a></li>
+                    <li><a href="my-anuncios.html">Mis Anuncios</a></li>
+                    <li><a href="my-intereses.html">Mis Intereses</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p><i class="fas fa-envelope"></i> info@cercademiurentals.com</p>
+                <p><i class="fas fa-phone"></i> +57 123 456 7890</p>
+                <p><i class="fas fa-map-marker-alt"></i> Florencia, Caquetá, Colombia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 CercaDeMi U Rentals. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="script.js"></script>
+    <script>
+        // Script para funcionalidad adicional
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle de filtros en móviles
+            const toggleFiltersBtn = document.getElementById('toggle-filters');
+            const filtersForm = document.getElementById('filter-form');
+            
+            if (toggleFiltersBtn && filtersForm) {
+                toggleFiltersBtn.addEventListener('click', function() {
+                    filtersForm.classList.toggle('show-filters');
+                });
+            }
+
+            // Toggle de mapa en móviles
+            const toggleMapBtn = document.getElementById('toggle-map');
+            const mapContainer = document.querySelector('.mapa-container');
+            
+            if (toggleMapBtn && mapContainer) {
+                toggleMapBtn.addEventListener('click', function() {
+                    mapContainer.classList.toggle('expanded');
+                    const icon = toggleMapBtn.querySelector('i');
+                    if (mapContainer.classList.contains('expanded')) {
+                        icon.classList.remove('fa-expand');
+                        icon.classList.add('fa-compress');
+                    } else {
+                        icon.classList.remove('fa-compress');
+                        icon.classList.add('fa-expand');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Anuncio - CercaDeMi U Rentals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Reutilizar estilos de crear-anuncio.html o definir específicos si es necesario */
+        #editar-anuncio-container {
+             background-color: var(--card-background);
+             padding: 2rem;
+             border-radius: 12px;
+             box-shadow: var(--box-shadow-md);
+             max-width: 800px;
+             margin: 2rem auto;
+        }
+
+        #editar-anuncio-container h2 {
+             color: var(--primary-dark);
+             border-bottom: 2px solid var(--primary-light);
+             padding-bottom: 0.8rem;
+             margin-bottom: 1.5rem;
+             font-size: 1.8rem;
+             font-weight: 600;
+             display: flex;
+             align-items: center;
+             gap: 0.75rem;
+        }
+         #editar-anuncio-container h2 i {
+            font-size: 1.5rem;
+        }
+
+         #editar-anuncio-form h3 {
+             font-size: 1.3em;
+             color: var(--primary-dark);
+             margin-top: 2rem;
+             margin-bottom: 1.25rem;
+             padding-bottom: 0.6rem;
+             border-bottom: 1px solid var(--border-color);
+             font-weight: 500;
+             display: flex;
+             align-items: center;
+             gap: 0.5rem;
+         }
+         #editar-anuncio-form h3:first-of-type {
+             margin-top: 0;
+         }
+         .form-grid { /* Para organizar campos en columnas */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+         }
+         #loading-anuncio-msg {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.1rem;
+            color: var(--text-medium);
+         }
+         #loading-anuncio-msg i {
+            margin-right: 0.5rem;
+         }
+         .form-actions-edit {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            justify-content: flex-end; /* Alinea botones a la derecha */
+         }
+         .form-actions-edit .btn {
+            min-width: 150px; /* Ancho mínimo para botones */
+         }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <a href="index.html" class="site-title">CercaDeMi U Rentals</a>
+            <nav class="site-nav">
+                <div class="nav-group main-links">
+                    </div>
+                <div class="nav-group auth-links">
+                    </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+         <div id="editar-anuncio-container">
+            <h2><i class="fas fa-edit"></i> Editar Anuncio</h2>
+            <p id="loading-anuncio-msg"><i class="fas fa-spinner fa-spin"></i> Cargando datos del anuncio...</p>
+            <form id="editar-anuncio-form" style="display:none;">
+                <h3><i class="fas fa-info-circle"></i> Datos del Anuncio</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="titulo"><i class="fas fa-heading"></i> Título del Anuncio:</label>
+                        <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Ej: Habitación amplia cerca a la U" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="precioMonto"><i class="fas fa-dollar-sign"></i> Precio Mensual (COP):</label>
+                        <input type="number" id="precioMonto" name="precioMonto" class="form-control" step="1000" min="0" placeholder="Ej: 500000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="terminoContrato"><i class="fas fa-file-contract"></i> Término Contrato:</label>
+                        <select id="terminoContrato" name="terminoContrato" class="form-control" required>
+                            <option value="" disabled>Selecciona...</option>
+                            <option value="Sin Contrato">Sin Contrato</option>
+                            <option value="3 Meses">3 Meses</option>
+                            <option value="6 Meses">6 Meses</option>
+                            <option value="1 Año">1 Año</option>
+                            <option value="Otro">Otro (Especificar en descripción)</option>
+                        </select>
+                    </div>
+                     <div class="form-group">
+                         <label for="fechaDisponibleDesde"><i class="fas fa-calendar-alt"></i> Fecha Disponible Desde:</label>
+                         <input type="date" id="fechaDisponibleDesde" name="fechaDisponibleDesde" class="form-control" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="numeroHabitacionesDisponibles"><i class="fas fa-bed"></i> Habitaciones Disponibles (en este anuncio):</label>
+                        <input type="number" id="numeroHabitacionesDisponibles" name="numeroHabitacionesDisponibles" class="form-control" min="1" value="1" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="numeroBanosDisponibles"><i class="fas fa-bath"></i> Baños Disponibles (para este anuncio):</label>
+                        <input type="number" id="numeroBanosDisponibles" name="numeroBanosDisponibles" class="form-control" min="0" placeholder="Opcional, si aplica">
+                    </div>
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="descripcionDetallada"><i class="fas fa-align-left"></i> Descripción Detallada:</label>
+                    <textarea id="descripcionDetallada" name="descripcionDetallada" class="form-control" rows="5" placeholder="Describe el lugar, reglas importantes, ambiente, servicios cercanos, etc."></textarea>
+                </div>
+                 <div class="form-group checkbox-group" style="margin-top: 1rem;">
+                     <input type="checkbox" id="esAnuncioCompartido" name="esAnuncioCompartido" class="checkbox-input">
+                     <label for="esAnuncioCompartido" class="checkbox-label"><i class="fas fa-users"></i> Es Anuncio Compartido (Se alquila por habitación/espacio)</label>
+                 </div>
+
+
+                <h3><i class="fas fa-home"></i> Datos de la Vivienda</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección:</label>
+                        <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ej: Calle 10 # 5-20" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="barrio"><i class="fas fa-map-pin"></i> Barrio:</label>
+                        <input type="text" id="barrio" name="barrio" class="form-control" placeholder="Ej: Centro, Porvenir" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="latitud"><i class="fas fa-location-arrow"></i> Latitud (Ej: 1.615):</label>
+                        <input type="number" id="latitud" name="latitud" class="form-control" step="any" placeholder="Coordenada Latitud" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="longitud"><i class="fas fa-location-arrow"></i> Longitud (Ej: -75.61):</label>
+                        <input type="number" id="longitud" name="longitud" class="form-control" step="any" placeholder="Coordenada Longitud" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoVivienda"><i class="fas fa-building"></i> Tipo Vivienda:</label>
+                        <select id="tipoVivienda" name="tipoVivienda" class="form-control" required>
+                            <option value="" disabled>Selecciona...</option>
+                            <option value="Apartamento">Apartamento</option>
+                            <option value="Casa">Casa</option>
+                            <option value="Apartaestudio">Apartaestudio</option>
+                            <option value="HabitacionIndependiente">Habitación Independiente</option>
+                            <option value="HabitacionCompartida">Habitación Compartida en casa/apto</option>
+                        </select>
+                    </div>
+                     <div class="form-group">
+                        <label for="numeroTotalHabitaciones"><i class="fas fa-door-open"></i> Habitaciones Totales (en la propiedad):</label>
+                        <input type="number" id="numeroTotalHabitaciones" name="numeroTotalHabitaciones" class="form-control" min="1" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="numeroTotalBanos"><i class="fas fa-shower"></i> Baños Totales (en la propiedad):</label>
+                        <input type="number" id="numeroTotalBanos" name="numeroTotalBanos" class="form-control" min="1" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="metrosCuadrados"><i class="fas fa-ruler-combined"></i> Metros Cuadrados (Aprox.):</label>
+                        <input type="number" id="metrosCuadrados" name="metrosCuadrados" class="form-control" min="0" placeholder="Opcional">
+                     </div>
+                </div>
+
+
+                 <h3><i class="fas fa-star"></i> Comodidades</h3>
+                 <div class="comodidades-grid">
+                     <div class="checkbox-group">
+                         <input type="checkbox" id="comodidad-wifi" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_wifi" class="checkbox-input">
+                         <label for="comodidad-wifi" class="checkbox-label"><i class="fas fa-wifi"></i> WiFi Incluido</label>
+                     </div>
+                     <div class="checkbox-group">
+                         <input type="checkbox" id="comodidad-amoblado" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_amoblado" class="checkbox-input">
+                         <label for="comodidad-amoblado" class="checkbox-label"><i class="fas fa-couch"></i> Amoblado</label>
+                     </div>
+                      <div class="checkbox-group">
+                         <input type="checkbox" id="comodidad-lavadora" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_lavadora" class="checkbox-input">
+                         <label for="comodidad-lavadora" class="checkbox-label"><i class="fas fa-tshirt"></i> Acceso a Lavadora</label>
+                     </div>
+                     <div class="checkbox-group">
+                         <input type="checkbox" id="comodidad-cocina" name="comodidades" value="http://www.example.org/cercademiurentals#comodidad_cocina" class="checkbox-input">
+                         <label for="comodidad-cocina" class="checkbox-label"><i class="fas fa-utensils"></i> Acceso a Cocina</label>
+                     </div>
+                 </div>
+
+                 <h3><i class="fas fa-gavel"></i> Reglas y Preferencias</h3>
+                 <div class="comodidades-grid">
+                      <div class="checkbox-group">
+                         <input type="checkbox" id="permiteMascotas" name="permiteMascotas" class="checkbox-input">
+                         <label for="permiteMascotas" class="checkbox-label"><i class="fas fa-paw"></i> Se permiten mascotas</label>
+                     </div>
+                     <div class="checkbox-group">
+                         <input type="checkbox" id="permiteFumar" name="permiteFumar" class="checkbox-input">
+                         <label for="permiteFumar" class="checkbox-label"><i class="fas fa-smoking"></i> Se permite fumar</label>
+                     </div>
+                     <div class="checkbox-group">
+                         <input type="checkbox" id="permiteInvitados" name="permiteInvitados" class="checkbox-input">
+                         <label for="permiteInvitados" class="checkbox-label"><i class="fas fa-user-friends"></i> Se permiten invitados</label>
+                     </div>
+                     <div class="checkbox-group">
+                         <input type="checkbox" id="soloEstudiantes" name="soloEstudiantes" class="checkbox-input">
+                         <label for="soloEstudiantes" class="checkbox-label"><i class="fas fa-user-graduate"></i> Solo para estudiantes</label>
+                     </div>
+                     <div class="checkbox-group">
+                         <input type="checkbox" id="estableceHorasSilencio" name="estableceHorasSilencio" class="checkbox-input">
+                         <label for="estableceHorasSilencio" class="checkbox-label"><i class="fas fa-volume-mute"></i> Se establecen horas de silencio</label>
+                     </div>
+                     <div class="form-group" style="grid-column: 1 / -1;">
+                         <label for="preferenciaGenero"><i class="fas fa-venus-mars"></i> Preferencia de Género (Compañeros):</label>
+                         <select id="preferenciaGenero" name="preferenciaGenero" class="form-control">
+                             <option value="">Indiferente</option>
+                             <option value="Solo Mujeres">Solo Mujeres</option>
+                             <option value="Solo Hombres">Solo Hombres</option>
+                         </select>
+                     </div>
+                 </div>
+
+                <div class="form-actions-edit">
+                    <a href="my-anuncios.html" class="btn btn-secondary"><i class="fas fa-times"></i> Cancelar</a>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>CercaDeMi U Rentals</h4>
+                <p>Encuentra tu hogar ideal cerca de la universidad.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="crear-anuncio.html">Publicar Anuncio</a></li>
+                    <li><a href="my-anuncios.html">Mis Anuncios</a></li>
+                    <li><a href="my-intereses.html">Mis Intereses</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p><i class="fas fa-envelope"></i> info@cercademiurentals.com</p>
+                <p><i class="fas fa-phone"></i> +57 123 456 7890</p>
+                <p><i class="fas fa-map-marker-alt"></i> Florencia, Caquetá, Colombia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2024</span> CercaDeMi U Rentals. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

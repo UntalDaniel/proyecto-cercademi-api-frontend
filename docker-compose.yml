@@ -1,0 +1,74 @@
+services:
+  # Servicio para Apache Jena Fuseki (tu base de datos semántica)
+  fuseki:
+    image: semapps/jena-fuseki-webacl:latest # O la imagen específica de Fuseki que estés utilizando
+    container_name: cercademi-fuseki
+    ports:
+      - "3333:3030" # Mapea el puerto 3333 del host al 3030 del contenedor (UI de Fuseki)
+    environment:
+      # Establece la contraseña de administrador para Fuseki.
+      - ADMIN_PASSWORD=Dwrangel23.
+      # Ejemplo para configurar dataset vía variable de entorno (si tu imagen lo soporta):
+      # - FUSEKI_DATASET_1=name=cercademiurentals,type=tdb2
+    volumes:
+      - fuseki_data:/fuseki # Volumen para persistir los datos de Fuseki
+    networks:
+      - cercademi-net
+    restart: unless-stopped
+
+  # Servicio para la base de datos PostgreSQL (para usuarios y autenticación)
+  db:
+    image: postgres:15
+    container_name: cercademi-postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cercademi_user
+      POSTGRES_PASSWORD: cercademi_password # ¡CAMBIA ESTO!
+      POSTGRES_DB: cercademi_rentals_users
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_user_data:/var/lib/postgresql/data
+    networks:
+      - cercademi-net
+
+  # Servicio para tu aplicación Backend (Spring Boot)
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cercademiurentals-backend
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    environment:
+      # Variables de entorno para la conexión a Fuseki
+      - FUSEKI_QUERY_ENDPOINT=http://fuseki:3030/cercademiurentals/query
+      - FUSEKI_UPDATE_ENDPOINT=http://fuseki:3030/cercademiurentals/update
+      - FUSEKI_USERNAME=admin
+      - FUSEKI_PASSWORD=Dwrangel23.
+
+      # Variables de entorno para la conexión a PostgreSQL
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/cercademi_rentals_users
+      - SPRING_DATASOURCE_USERNAME=cercademi_user
+      - SPRING_DATASOURCE_PASSWORD=cercademi_password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update # En desarrollo, permite crear/actualizar esquema. Para producción: 'validate' o 'none'.
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+
+      # Opcional: Activar un perfil específico de Spring Boot para Docker
+      # - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - fuseki
+      - db
+    networks:
+      - cercademi-net
+
+# Definición de volúmenes nombrados para la persistencia de datos
+volumes:
+  fuseki_data:
+  postgres_user_data:
+
+# Definición de la red personalizada para la comunicación entre servicios
+networks:
+  cercademi-net:
+    driver: bridge

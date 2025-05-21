@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - CercaDeMi U Rentals</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos específicos que ya tenías, más algunos ajustes */
+        .placeholder-text { color: #aaa; font-style: italic; }
+        .default-avatar-placeholder {
+            width: 150px; height: 150px; border-radius: 50%;
+            background-color: var(--primary-light); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 4rem; font-weight: bold; border: 4px solid white;
+        }
+        #profile-about-edit-container, #profile-prefs-edit-container { display: none; margin-top: 10px; }
+        #profile-about-textarea, #profile-prefs-edit-container select, #profile-prefs-edit-container input { 
+            width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 4px; 
+            border: 1px solid var(--border-color); font-family: inherit; font-size: 0.95rem;
+        }
+        .edit-actions button { margin-right: 10px; }
+
+        /* --- ESTILOS MEJORADOS PARA TARJETAS EN PERFIL --- */
+        .profile-card .anuncios-grid-profile { /* Nuevo contenedor para las tarjetas */
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajusta minmax según necesites */
+            gap: 1.5rem;
+            margin-top: 1rem; /* Espacio después del encabezado de la sección */
+        }
+
+        .profile-card .anuncio-card-profile { /* Estilo para cada tarjeta individual */
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem; /* Aumentar padding interno */
+            box-shadow: var(--box-shadow-sm);
+            transition: var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Asegura que el botón de detalles esté al fondo */
+        }
+        .profile-card .anuncio-card-profile:hover {
+            transform: translateY(-4px); /* Sutil efecto hover */
+            box-shadow: var(--box-shadow-md);
+        }
+        .profile-card .anuncio-card-profile h4 {
+            font-size: 1.1rem; /* Un poco más grande */
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin: 0 0 0.6rem 0; /* Ajustar margen */
+            line-height: 1.3;
+        }
+        .profile-card .anuncio-card-profile p {
+            font-size: 0.9rem; /* Ligeramente más grande */
+            color: var(--text-medium);
+            margin-bottom: 0.4rem; /* Ajustar margen */
+        }
+        .profile-card .anuncio-card-profile .item-price {
+            font-weight: 600; /* Más énfasis en el precio */
+            color: var(--accent-color);
+            font-size: 1.05rem; /* Ligeramente más grande */
+            margin-bottom: 0.75rem; /* Espacio antes del enlace */
+        }
+        .profile-card .anuncio-card-profile .view-details-link {
+            font-size: 0.85rem; /* Ligeramente más grande */
+            display: inline-block; /* Para que se comporte como botón */
+            text-align: center;
+            margin-top: 1rem; /* Espacio sobre el botón */
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .profile-card .anuncio-card-profile .view-details-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .profile-card .anuncio-card-profile .view-details-link i {
+            margin-left: 0.3rem;
+        }
+        /* --- FIN ESTILOS MEJORADOS --- */
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <a href="index.html" class="site-title">CercaDeMi U Rentals</a>
+            <nav class="site-nav">
+                <div class="nav-group main-links"></div>
+                <div class="nav-group auth-links"></div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <header class="profile-header">
+            <div class="profile-banner">
+                <div class="profile-avatar">
+                    <img src="img/default-avatar.jpg" alt="Avatar de Usuario" id="profile-avatar-img" style="display:none;">
+                    <div class="default-avatar-placeholder" id="profile-avatar-placeholder">
+                        <span id="profile-avatar-initial">U</span>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h1 id="profile-fullname"><span class="placeholder-text">Cargando...</span></h1>
+                    <p class="user-email" id="profile-email"><span class="placeholder-text">Cargando...</span></p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="profile-num-anuncios">0</span>
+                            <span class="stat-label">Anuncios</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="profile-num-intereses">0</span>
+                            <span class="stat-label">Intereses</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="profile-rating">N/A</span>
+                            <span class="stat-label">Valoración</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="profile-content">
+            <aside class="profile-sidebar">
+                <div class="profile-card">
+                    <h3>Información de Contacto</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-user fa-fw"></i><span id="profile-username"><span class="placeholder-text">Cargando...</span></span></li>
+                        <li><i class="fas fa-envelope fa-fw"></i><span id="profile-contact-email"><span class="placeholder-text">Cargando...</span></span></li>
+                        <li><i class="fas fa-calendar-alt fa-fw"></i>Miembro desde: <span id="profile-member-since"><span class="placeholder-text">Cargando...</span></span></li>
+                    </ul>
+                </div>
+                 <div class="profile-card">
+                    <div class="card-header">
+                        <h3>Preferencias de Búsqueda</h3>
+                        <button class="btn-text" id="profile-edit-prefs-btn"><i class="fas fa-pencil-alt"></i> Editar</button>
+                    </div>
+                    <div id="profile-search-prefs-display">
+                        <div class="preference-item">
+                            <span class="preference-label">Tipo de vivienda:</span>
+                            <span class="preference-value" id="pref-tipo-vivienda-display"><span class="placeholder-text">(No configurado)</span></span>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-label">Rango de precios (Max):</span>
+                            <span class="preference-value" id="pref-rango-precios-display"><span class="placeholder-text">(No configurado)</span></span>
+                        </div>
+                    </div>
+                    <div id="profile-prefs-edit-container">
+                        <div class="form-group">
+                            <label for="pref-edit-tipo-vivienda">Tipo de Vivienda Preferido:</label>
+                            <select id="pref-edit-tipo-vivienda" name="prefTipoVivienda" class="form-control">
+                                <option value="">Cualquiera</option>
+                                <option value="Apartamento">Apartamento</option>
+                                <option value="Casa">Casa</option>
+                                <option value="HabitacionCompartida">Habitación Compartida</option>
+                                <option value="Apartaestudio">Apartaestudio</option>
+                                <option value="HabitacionIndependiente">Habitación Independiente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pref-edit-precio-max">Precio Máximo Deseado:</label>
+                            <input type="number" id="pref-edit-precio-max" name="prefPrecioMax" class="form-control" placeholder="Ej: 800000" step="50000">
+                        </div>
+                        <div class="edit-actions">
+                            <button class="btn btn-primary btn-sm" id="profile-save-prefs-btn">Guardar</button>
+                            <button class="btn btn-secondary btn-sm" id="profile-cancel-prefs-btn">Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="profile-main">
+                <div class="profile-card">
+                    <div class="card-header">
+                        <h3>Acerca de mí</h3>
+                        <button class="btn-text" id="profile-edit-about-btn"><i class="fas fa-pencil-alt"></i> Editar</button>
+                    </div>
+                    <div class="about-content">
+                        <p id="profile-about-text"><span class="placeholder-text">Aún no has añadido una biografía.</span></p>
+                        <div id="profile-about-edit-container">
+                            <textarea id="profile-about-textarea" rows="4" class="form-control" placeholder="Escribe algo sobre ti..."></textarea>
+                            <div class="edit-actions">
+                                <button class="btn btn-primary btn-sm" id="profile-save-about-btn">Guardar</button>
+                                <button class="btn btn-secondary btn-sm" id="profile-cancel-about-btn">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="card-header">
+                        <h3>Mis Anuncios Publicados</h3>
+                        <a href="my-anuncios.html" class="btn-text" id="profile-view-all-anuncios" style="display:none;">Ver todos <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div id="profile-anuncios-list-cards" class="anuncios-grid-profile">
+                        </div>
+                    <div class="empty-state" id="profile-anuncios-empty" style="display:none;">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No tienes anuncios publicados.</p>
+                        <a href="crear-anuncio.html" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Publicar mi primer anuncio</a>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="card-header">
+                        <h3>Mis Intereses Guardados</h3>
+                        <a href="my-intereses.html" class="btn-text" id="profile-view-all-intereses" style="display:none;">Ver todos <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    <div id="profile-intereses-list-cards" class="anuncios-grid-profile">
+                        </div>
+                    <div class="empty-state" id="profile-intereses-empty" style="display:none;">
+                        <i class="fas fa-heart-crack"></i>
+                        <p>No has guardado ningún anuncio como interesante.</p>
+                        <a href="index.html" class="btn btn-primary"><i class="fas fa-search"></i> Explorar Anuncios</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+             <div class="footer-section">
+                <h4>CercaDeMi U Rentals</h4>
+                <p>Encuentra tu hogar ideal cerca de la universidad.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="crear-anuncio.html">Publicar Anuncio</a></li>
+                    <li><a href="my-anuncios.html">Mis Anuncios</a></li>
+                    <li><a href="my-intereses.html">Mis Intereses</a></li>
+                     <li><a href="profile.html">Mi Perfil</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p><i class="fas fa-envelope"></i> info@cercademiurentals.com</p>
+                <p><i class="fas fa-phone"></i> +57 123 456 7890</p>
+                <p><i class="fas fa-map-marker-alt"></i> Florencia, Caquetá, Colombia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2024</span> CercaDeMi U Rentals. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

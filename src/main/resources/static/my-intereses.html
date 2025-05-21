@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Anuncios de Interés - CercaDeMi U Rentals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-area { 
+             background-color: var(--card-background);
+             padding: 2rem;
+             border-radius: 12px;
+             box-shadow: var(--box-shadow-md);
+             max-width: 900px; /* Asegura un ancho máximo para el contenido */
+             margin: 2rem auto; /* Centra el bloque de contenido horizontalmente */
+        }
+        .content-area h2 {
+             color: var(--primary-dark);
+             border-bottom: 2px solid var(--primary-light);
+             padding-bottom: 0.8rem;
+             margin-bottom: 1.5rem;
+             font-size: 1.8rem;
+             font-weight: 600;
+             display: flex;
+             align-items: center;
+             gap: 0.75rem;
+        }
+         .content-area h2 i {
+            font-size: 1.5rem;
+        }
+        #my-intereses-list .anuncio-card-actions {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex; 
+            justify-content: space-between; 
+            gap: 0.75rem;
+        }
+        #my-intereses-list .anuncio-card-actions .btn {
+            flex-grow: 1; 
+            max-width: calc(50% - 0.375rem); 
+        }
+         #my-intereses-list .anuncio-card .btn-danger { 
+            background-color: var(--danger-color);
+            color: white;
+        }
+        #my-intereses-list .anuncio-card .btn-danger:hover {
+            background-color: #b02a37; 
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <a href="index.html" class="site-title">CercaDeMi U Rentals</a>
+            <nav class="site-nav">
+                <div class="nav-group main-links">
+                    </div>
+                <div class="nav-group auth-links">
+                    </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content-area">
+            <h2><i class="fas fa-heart"></i> Mis Anuncios de Interés</h2>
+            <div id="my-intereses-list" class="anuncios-grid">
+                <div class="loading-state"> 
+                    <div class="spinner"></div>
+                    <p>Cargando tus anuncios de interés...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>CercaDeMi U Rentals</h4>
+                <p>Encuentra tu hogar ideal cerca de la universidad.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="crear-anuncio.html">Publicar Anuncio</a></li>
+                    <li><a href="my-anuncios.html">Mis Anuncios</a></li>
+                    <li><a href="my-intereses.html">Mis Intereses</a></li>
+                     <li><a href="profile.html">Mi Perfil</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <p><i class="fas fa-envelope"></i> info@cercademiurentals.com</p>
+                <p><i class="fas fa-phone"></i> +57 123 456 7890</p>
+                <p><i class="fas fa-map-marker-alt"></i> Florencia, Caquetá, Colombia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2024</span> CercaDeMi U Rentals. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Inicializa el año actual en el footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
